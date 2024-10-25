@@ -39,7 +39,7 @@
       transition: transform 0.6s;
       transform-style: preserve-3d;
     }
-    .card.flipped .card-inner {
+    .flipped {
       transform: rotateY(180deg);
     }
     .card.shake .card-inner {
@@ -169,17 +169,16 @@
     function lockMatchedCards() {
       firstCard.classList.add("matched");
       secondCard.classList.add("matched");
-      resetBoard();
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
     }
 
     function shakeAndUnflipCards() {
       lockBoard = true;
-      firstCard.parentElement.classList.add("shake");
-      secondCard.parentElement.classList.add("shake");
-
       setTimeout(() => {
-        firstCard.classList.remove("flipped", "shake");
-        secondCard.classList.remove("flipped", "shake");
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
         resetBoard();
       }, 800);
     }
