@@ -76,8 +76,8 @@
     }
     .button-bar {
       display: flex;
-      gap: 10px;
-      margin: 10px 15px; /* Butonlar ile alt kenar arasındaki boşluk ayarlandı */
+      justify-content: center;
+      margin: 10px 15px;
     }
     .btn-custom {
       flex: 1;
@@ -85,12 +85,13 @@
       font-size: 1rem;
     }
     .card-body {
-      padding: 5px 15px; /* Kartların üst kenarı ile sayaçlar arasındaki boşluk ayarlandı */
+      padding: 5px 15px;
+      margin-bottom: 10px;
     }
     .card-container {
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Üst ve alt boşluklar eşitlendi */
+      justify-content: space-between;
       height: 100%;
       max-width: 420px;
       margin: 0;
@@ -108,8 +109,7 @@
       <div class="game-board" id="gameBoard"></div>
     </div>
     <div class="button-bar">
-      <button id="startButton" class="btn btn-success btn-custom" onclick="startGame()">BAŞLA</button>
-      <button id="resetButton" class="btn btn-danger btn-custom" onclick="resetGame()">SIFIRLA</button>
+      <button id="resetButton" class="btn btn-danger btn-custom" onclick="resetGame()">TEKRAR OYNA</button>
     </div>
   </div>
 
@@ -223,15 +223,6 @@
       const minutes = Math.floor(seconds / 60);
       const displaySeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
       document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}`;
-    }
-
-    function startGame() {
-      gameStarted = false;
-      moveCount = 0;
-      seconds = 0;
-      matches = 0;
-      document.getElementById("moveCounter").innerText = `Hamle: 0`;
-      document.getElementById("gameTimer").innerText = `Süre: 00:00`;
     }
 
     function resetGame() {
