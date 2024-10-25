@@ -24,7 +24,7 @@
     }
     .card {
       width: 100%;
-      padding-top: 200%; /* Yükseklik 2 katına çıkarıldı */
+      padding-top: 100%; /* Kartlar kare olacak şekilde ayarlandı */
       position: relative;
       cursor: pointer;
       perspective: 1000px;
@@ -77,7 +77,7 @@
     .button-bar {
       display: flex;
       gap: 10px;
-      margin: 10px;
+      margin: 10px 15px; /* Butonlar ile alt kenar arasındaki boşluk ayarlandı */
     }
     .btn-custom {
       flex: 1;
@@ -85,16 +85,21 @@
       font-size: 1rem;
     }
     .card-body {
-      padding: 5px; /* Boşlukları azaltmak için padding düzenlendi */
+      padding: 5px 15px; /* Kartların üst kenarı ile sayaçlar arasındaki boşluk ayarlandı */
     }
-    .game-board {
-      margin-top: 10px; /* Kartlar ile sayaçlar arasındaki boşluğu azalttık */
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Üst ve alt boşluklar eşitlendi */
+      height: 100%;
+      max-width: 420px;
+      margin: 0;
     }
   </style>
 </head>
 <body>
 
-  <div class="card shadow" style="max-width: 420px;">
+  <div class="card-container shadow">
     <div class="info-bar">
       <div id="gameTimer">Süre: 00:00</div>
       <div id="moveCounter">Hamle: 0</div>
