@@ -16,17 +16,17 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
     body {
       padding: 20px;
     }
     .container {
       width: 100%;
-      max-width: 600px; /* Daha geniş ekranlar için genişliği artırdık */
-      padding: 0;
+      max-width: 450px; /* Daha geniş bir kart yapısı için genişlik ayarı */
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -35,12 +35,23 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
+    .card-header h4 {
+      font-size: 1.8rem; /* Başlığı büyüttük */
+    }
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem; /* Sayaçların fontunu büyüttük */
+      padding: 10px 0;
+      width: 100%;
+      text-align: center;
+    }
     .game-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 10px;
       width: 100%;
-      max-width: 500px; /* Kartların boyutu için genişlik sınırı belirledik */
+      max-width: 420px; /* Kartların genişliği için sınırlama */
     }
     .card {
       width: 100%;
@@ -78,14 +89,6 @@
       background-position: center;
       transform: rotateY(180deg);
     }
-    .info-bar {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      padding: 0 10px;
-      margin-bottom: 10px;
-      width: 100%;
-    }
     .button-bar {
       display: flex;
       justify-content: center;
@@ -106,7 +109,7 @@
     }
     .result-log ul li {
       margin-bottom: 10px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: bold;
     }
     .result-log {
