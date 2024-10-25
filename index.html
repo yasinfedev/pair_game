@@ -25,7 +25,7 @@
     }
     .container {
       width: 100%;
-      max-width: 450px;
+      max-width: 500px; /* Konteynerin genişliği ayarlandı */
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -48,14 +48,14 @@
     }
     .game-board {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 4 yerine 3 kolona düşürdük */
-      grid-gap: 15px; /* Kartlar arası boşluğu artırdık */
+      grid-template-columns: repeat(3, 1fr); /* 3 sütun olarak ayarlandı */
+      grid-gap: 20px; /* Kartlar arasındaki boşluk artırıldı */
       width: 100%;
-      max-width: 400px; /* Kart genişliği ayarlandı */
+      max-width: 500px; /* Maksimum genişlik artırıldı */
     }
     .card {
       width: 100%;
-      padding-top: 100%; /* Kartın tam kare olmasını sağlıyor */
+      padding-top: 150%; /* Kartların %50 büyütülmesi için oran artırıldı */
       position: relative;
       cursor: pointer;
       perspective: 1000px;
