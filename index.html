@@ -25,7 +25,7 @@
     }
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 400px;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -48,14 +48,13 @@
     }
     .game-board {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 sütun olarak ayarlandı */
-      grid-gap: 5px; /* Kartlar arasındaki boşluk azaltıldı */
+      grid-template-columns: repeat(3, 1fr); /* 3 sütun */
+      gap: 8px; /* Gap boyutu ayarlandı */
       width: 100%;
-      max-width: 500px; /* Maksimum genişlik ayarlandı */
     }
     .card {
       width: 100%;
-      aspect-ratio: 1 / 1; /* Kartları kare yapıyoruz */
+      aspect-ratio: 1 / 1; /* Kare oranı */
       position: relative;
       cursor: pointer;
       perspective: 1000px;
@@ -96,12 +95,11 @@
       margin-top: 15px;
     }
     .btn-custom {
-      width: 100%;
-      height: 60px; /* Butonun yüksekliği ayarlandı */
+      width: calc(100% - 16px); /* 3 kart + 2 gap genişliğinde */
+      height: 60px;
       font-size: 1.2rem;
       background-color: green;
       color: white;
-      max-width: 500px; /* 3 kart genişliğinde */
     }
     .result-log ul {
       list-style-type: none;
