@@ -42,6 +42,15 @@
     .card.flipped .card-inner {
       transform: rotateY(180deg);
     }
+    .card.shake .card-inner {
+      animation: shake 0.5s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotateY(180deg) translateX(0); }
+      25% { transform: rotateY(180deg) translateX(-5px); }
+      50% { transform: rotateY(180deg) translateX(5px); }
+      75% { transform: rotateY(180deg) translateX(-5px); }
+    }
     .card-front, .card-back {
       position: absolute;
       width: 100%;
@@ -65,6 +74,11 @@
       font-size: 0.8rem;
       padding: 5px 10px;
     }
+    .button-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -76,6 +90,10 @@
     </div>
     <div class="card-body">
       <div class="game-board" id="gameBoard"></div>
+    </div>
+    <div class="button-bar">
+      <button id="startButton" class="btn btn-success btn-block" onclick="startGame()">BAŞLA</button>
+      <button id="resetButton" class="btn btn-danger btn-block" onclick="resetGame()">SIFIRLA</button>
     </div>
   </div>
 
@@ -94,6 +112,7 @@
     let moveCount = 0;
     let seconds = 0;
     let timerInterval;
+    let gameStarted = false;
 
     function shuffle(array) {
       array.sort(() => Math.random() - 0.5);
@@ -102,6 +121,7 @@
     function createBoard() {
       shuffle(cards);
       const gameBoard = document.getElementById("gameBoard");
+      gameBoard.innerHTML = ''; // Temizle ve yeni kartları ekle
       cards.forEach(card => {
         const cardElement = document.createElement("div");
         cardElement.classList.add("card");
@@ -114,19 +134,19 @@
         cardElement.addEventListener("click", flipCard);
         gameBoard.appendChild(cardElement);
       });
-      startTimer();
     }
 
     function flipCard() {
-      if (lockBoard) return;
+      if (lockBoard || !gameStarted) return;
       const cardInner = this.querySelector(".card-inner");
+      if (cardInner === firstCard) return; // Aynı kart tekrar seçilmez
       cardInner.classList.add("flipped");
 
       if (!firstCard) {
         firstCard = cardInner;
         return;
       }
-      
+
       secondCard = cardInner;
       checkMatch();
     }
@@ -141,7 +161,7 @@
           clearInterval(timerInterval); // Oyun bittiğinde sayaç durdurulacak
         }
       } else {
-        unflipCards();
+        shakeAndUnflipCards();
       }
       updateMoveCounter();
     }
@@ -152,13 +172,18 @@
       resetBoard();
     }
 
-    function unflipCards() {
+    function shakeAndUnflipCards() {
       lockBoard = true;
+      firstCard.parentElement.classList.add("shake");
+      secondCard.parentElement.classList.add("shake");
+
       setTimeout(() => {
         firstCard.classList.remove("flipped");
         secondCard.classList.remove("flipped");
+        firstCard.parentElement.classList.remove("shake");
+        secondCard.parentElement.classList.remove("shake");
         resetBoard();
-      }, 1000);
+      }, 800);
     }
 
     function resetBoard() {
@@ -179,6 +204,29 @@
       const minutes = Math.floor(seconds / 60);
       const displaySeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
       document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}`;
+    }
+
+    function startGame() {
+      if (!gameStarted) {
+        gameStarted = true;
+        moveCount = 0;
+        seconds = 0;
+        matches = 0;
+        document.getElementById("moveCounter").innerText = `Hamle: 0`;
+        document.getElementById("gameTimer").innerText = `Süre: 00:00`;
+        startTimer();
+      }
+    }
+
+    function resetGame() {
+      clearInterval(timerInterval);
+      gameStarted = false;
+      moveCount = 0;
+      seconds = 0;
+      matches = 0;
+      document.getElementById("moveCounter").innerText = `Hamle: 0`;
+      document.getElementById("gameTimer").innerText = `Süre: 00:00`;
+      createBoard();
     }
 
     createBoard();
