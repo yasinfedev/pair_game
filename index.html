@@ -15,25 +15,16 @@
       margin: 0;
       background-color: #f4f4f4;
     }
-    .card-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: stretch;
-      height: 100%;
-      max-width: 420px;
-      margin: 0;
-    }
     .game-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 10px;
+      max-width: 400px;
       width: 100%;
-      flex-grow: 1;
     }
     .card {
       width: 100%;
-      padding-top: 100%;
+      padding-top: 100%; /* Kare kartlar */
       position: relative;
       cursor: pointer;
       perspective: 1000px;
@@ -73,21 +64,6 @@
       font-size: 0.9rem;
       padding: 5px 15px;
     }
-    .button-bar {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    .btn-custom {
-      flex: 1;
-      height: 40px;
-      font-size: 1rem;
-      background-color: green;
-      color: white;
-    }
-    .result-log {
-      margin-top: 20px;
-    }
     .result-log ul {
       list-style-type: none;
       padding: 0;
@@ -101,18 +77,34 @@
 </head>
 <body>
 
-  <div class="card-container shadow">
-    <div class="info-bar">
-      <div id="gameTimer">Süre: 00:00</div>
-      <div id="moveCounter">Hamle: 0</div>
-    </div>
-    <div class="game-board" id="gameBoard"></div>
-    <div class="button-bar">
-      <button id="resetButton" class="btn btn-custom" onclick="resetGame()">BAŞTAN BAŞLA</button>
-    </div>
-    <div class="result-log">
-      <h5>Oyun Sonuçları:</h5>
-      <ul id="resultsList"></ul>
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Eşleştirme Oyunu</h4>
+          </div>
+          <div class="card-body">
+            <div class="info-bar mb-3">
+              <div id="gameTimer">Süre: 00:00</div>
+              <div id="moveCounter">Hamle: 0</div>
+            </div>
+            <div class="game-board" id="gameBoard"></div>
+            <div class="button-bar mt-3 text-center">
+              <button id="resetButton" class="btn btn-success btn-lg" onclick="resetGame()">BAŞTAN BAŞLA</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header text-center">
+            <h5>Oyun Sonuçları</h5>
+          </div>
+          <div class="card-body">
+            <ul id="resultsList"></ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
