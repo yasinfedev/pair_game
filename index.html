@@ -139,7 +139,7 @@
     function flipCard() {
       if (lockBoard || !gameStarted) return;
       const cardInner = this.querySelector(".card-inner");
-      if (cardInner === firstCard) return; // Aynı kart tekrar seçilmez
+      if (cardInner === firstCard || cardInner.classList.contains("matched")) return; // Aynı kart tekrar seçilmez veya eşleşmiş kartlar açılmaz
       cardInner.classList.add("flipped");
 
       if (!firstCard) {
@@ -154,7 +154,7 @@
     function checkMatch() {
       const isMatch = firstCard.dataset.id === secondCard.dataset.id;
       if (isMatch) {
-        disableCards();
+        lockMatchedCards();
         matches += 1;
         if (matches === cards.length / 2) {
           setTimeout(() => alert("Tebrikler! Tüm eşleşmeleri buldunuz."), 500);
@@ -166,9 +166,9 @@
       updateMoveCounter();
     }
 
-    function disableCards() {
-      firstCard.removeEventListener("click", flipCard);
-      secondCard.removeEventListener("click", flipCard);
+    function lockMatchedCards() {
+      firstCard.classList.add("matched");
+      secondCard.classList.add("matched");
       resetBoard();
     }
 
@@ -178,10 +178,8 @@
       secondCard.parentElement.classList.add("shake");
 
       setTimeout(() => {
-        firstCard.classList.remove("flipped");
-        secondCard.classList.remove("flipped");
-        firstCard.parentElement.classList.remove("shake");
-        secondCard.parentElement.classList.remove("shake");
+        firstCard.classList.remove("flipped", "shake");
+        secondCard.classList.remove("flipped", "shake");
         resetBoard();
       }, 800);
     }
