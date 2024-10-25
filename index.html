@@ -16,25 +16,23 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0;
-      padding: 0;
       background-color: #f4f4f4;
+      margin: 0;
+    }
+    body {
+      padding: 20px;
     }
     .container {
       width: 100%;
       max-width: 420px;
-      padding: 0;
-    }
-    .card {
-      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      border-radius: 8px;
       background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .game-board {
       display: grid;
@@ -118,23 +116,21 @@
 <body>
 
   <div class="container">
-    <div class="card">
-      <div class="card-header text-center p-2">
-        <h4 class="mb-1">Eşleştirme Oyunu</h4>
+    <div class="card-header text-center p-2">
+      <h4 class="mb-1">Eşleştirme Oyunu</h4>
+    </div>
+    <div class="card-body">
+      <div class="info-bar">
+        <div id="gameTimer">Süre: 00:00</div>
+        <div id="moveCounter">Hamle: 0</div>
       </div>
-      <div class="card-body">
-        <div class="info-bar">
-          <div id="gameTimer">Süre: 00:00</div>
-          <div id="moveCounter">Hamle: 0</div>
-        </div>
-        <div class="game-board" id="gameBoard"></div>
-        <div class="button-bar mt-3 text-center">
-          <button id="resetButton" class="btn btn-custom" onclick="resetGame()">BAŞTAN BAŞLA</button>
-        </div>
-        <div class="result-log mt-3">
-          <h5 class="text-center">Oyun Sonuçları</h5>
-          <ul id="resultsList"></ul>
-        </div>
+      <div class="game-board" id="gameBoard"></div>
+      <div class="button-bar mt-3 text-center">
+        <button id="resetButton" class="btn btn-custom" onclick="resetGame()">BAŞTAN BAŞLA</button>
+      </div>
+      <div class="result-log mt-3">
+        <h5 class="text-center">Oyun Sonuçları</h5>
+        <ul id="resultsList"></ul>
       </div>
     </div>
   </div>
