@@ -11,29 +11,26 @@
       padding: 0;
       box-sizing: border-box;
     }
-    body, html {
-      font-family: Arial, sans-serif;
+    html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
-    .container {
-      max-width: 100%;
-      padding: 0;
-      height: 100%;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Üst boşluğu kaldırmak için */
+      align-items: flex-start; /* Sayfanın üstüne yerleştiriyoruz */
+      padding-top: 0; /* Üst boşluğu sıfırladık */
     }
-    .card {
+    .container {
       width: 100%;
       max-width: 420px;
-      margin: 0;
+      padding: 0;
     }
     .card-header {
-      margin-top: 0; /* Üst boşluğu sıfırladık */
-      padding: 0.5rem 1rem; /* Varsayılan padding */
+      margin-top: 0;
     }
     .game-board {
       display: grid;
