@@ -15,12 +15,21 @@
       margin: 0;
       background-color: #f4f4f4;
     }
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: stretch;
+      height: 100%;
+      max-width: 420px;
+      margin: 0;
+    }
     .game-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 10px;
-      max-width: 400px;
       width: 100%;
+      flex-grow: 1; /* Boş alanın büyük kısmını oyun tahtasına ayır */
     }
     .card {
       width: 100%;
@@ -28,7 +37,6 @@
       position: relative;
       cursor: pointer;
       perspective: 1000px;
-      min-width: 80px; /* Mobilde minimum genişlik */
     }
     .card-inner {
       position: absolute;
@@ -77,24 +85,12 @@
     .button-bar {
       display: flex;
       justify-content: center;
-      margin: 10px 15px;
+      margin-top: 10px;
     }
     .btn-custom {
       flex: 1;
       height: 40px;
       font-size: 1rem;
-    }
-    .card-body {
-      padding: 5px 15px;
-      margin-bottom: 10px;
-    }
-    .card-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      max-width: 420px;
-      margin: 0;
     }
   </style>
 </head>
@@ -105,9 +101,7 @@
       <div id="gameTimer">Süre: 00:00</div>
       <div id="moveCounter">Hamle: 0</div>
     </div>
-    <div class="card-body">
-      <div class="game-board" id="gameBoard"></div>
-    </div>
+    <div class="game-board" id="gameBoard"></div>
     <div class="button-bar">
       <button id="resetButton" class="btn btn-danger btn-custom" onclick="resetGame()">TEKRAR OYNA</button>
     </div>
