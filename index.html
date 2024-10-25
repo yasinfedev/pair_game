@@ -84,6 +84,12 @@
       height: 40px;
       font-size: 1rem;
     }
+    .card-body {
+      padding: 5px; /* Boşlukları azaltmak için padding düzenlendi */
+    }
+    .game-board {
+      margin-top: 10px; /* Kartlar ile sayaçlar arasındaki boşluğu azalttık */
+    }
   </style>
 </head>
 <body>
@@ -93,7 +99,7 @@
       <div id="gameTimer">Süre: 00:00</div>
       <div id="moveCounter">Hamle: 0</div>
     </div>
-    <div class="card-body p-2">
+    <div class="card-body">
       <div class="game-board" id="gameBoard"></div>
     </div>
     <div class="button-bar">
