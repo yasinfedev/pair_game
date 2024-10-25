@@ -15,6 +15,7 @@
       font-family: Arial, sans-serif;
       height: 100%;
       margin: 0;
+      padding: 0;
       background-color: #f4f4f4;
     }
     .container {
@@ -23,17 +24,17 @@
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Üst boşluğu kaldırmak için flex-start kullanıldı */
+      align-items: flex-start; /* Üst boşluğu kaldırmak için */
     }
     .card {
       width: 100%;
       max-width: 420px;
-      margin-top: 0; /* Üst boşluğu sıfırladık */
+      margin: 0;
     }
     .card-header {
       margin-top: 0; /* Üst boşluğu sıfırladık */
+      padding: 0.5rem 1rem; /* Varsayılan padding */
     }
-    
     .game-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
