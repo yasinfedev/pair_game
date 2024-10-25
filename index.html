@@ -25,7 +25,7 @@
     }
     .container {
       width: 100%;
-      max-width: 450px; /* Daha geniş bir kart yapısı için genişlik ayarı */
+      max-width: 450px;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -36,26 +36,26 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .card-header h4 {
-      font-size: 1.8rem; /* Başlığı büyüttük */
+      font-size: 1.8rem;
     }
     .info-bar {
       display: flex;
       justify-content: space-between;
-      font-size: 1.1rem; /* Sayaçların fontunu büyüttük */
+      font-size: 1.1rem;
       padding: 10px 0;
       width: 100%;
       text-align: center;
     }
     .game-board {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 10px;
+      grid-template-columns: repeat(3, 1fr); /* 4 yerine 3 kolona düşürdük */
+      grid-gap: 15px; /* Kartlar arası boşluğu artırdık */
       width: 100%;
-      max-width: 420px; /* Kartların genişliği için sınırlama */
+      max-width: 400px; /* Kart genişliği ayarlandı */
     }
     .card {
       width: 100%;
-      padding-top: 100%;
+      padding-top: 100%; /* Kartın tam kare olmasını sağlıyor */
       position: relative;
       cursor: pointer;
       perspective: 1000px;
