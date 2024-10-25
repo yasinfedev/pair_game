@@ -18,11 +18,12 @@
       height: 100%;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Üst boşluğu kaldırmak için flex-start kullanıldı */
     }
     .card {
       width: 100%;
       max-width: 420px;
+      margin-top: 0; /* Üst boşluğu sıfırladık */
     }
     .game-board {
       display: grid;
