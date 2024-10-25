@@ -1,152 +1,151 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <title>Eşleştirme Oyunu</title>
-    <style>
-      body, html {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f4f4f4;
-      }
-      .game-board {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-gap: 10px;
-        max-width: 400px;
-      }
-      .card {
-        width: 100%;
-        padding-top: 100%; /* Kare kartlar için */
-        position: relative;
-        cursor: pointer;
-        perspective: 1000px;
-      }
-      .card-inner {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-      }
-      .card.flipped .card-inner {
-        transform: rotateY(180deg);
-      }
-      .card-front, .card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        border-radius: 10px;
-      }
-      .card-front {
-        background-color: #333;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5em;
-      }
-      .card-back {
-        background-size: cover;
-        background-position: center;
-        transform: rotateY(180deg);
-      }
-    </style>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <title>Eşleştirme Oyunu</title>
+  <style>
+    body, html {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      max-width: 400px;
+      width: 100%;
+    }
+    .card {
+      width: 100%;
+      padding-top: 100%; /* Kare kartlar için */
+      position: relative;
+      cursor: pointer;
+      perspective: 1000px;
+      min-width: 80px; /* Mobilde minimum genişlik */
+    }
+    .card-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+    .card-front {
+      background-image: url('https://acil42.com/wp-content/uploads/2024/10/on_yuz.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .card-back {
+      background-size: cover;
+      background-position: center;
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body>
 
-    <div class="game-board" id="gameBoard"></div>
+  <div class="game-board" id="gameBoard"></div>
 
-    <script>
-      const cards = [
-        { id: 1, img: 'back1.jpg' }, { id: 1, img: 'back1.jpg' },
-        { id: 2, img: 'back2.jpg' }, { id: 2, img: 'back2.jpg' },
-        { id: 3, img: 'back3.jpg' }, { id: 3, img: 'back3.jpg' },
-        { id: 4, img: 'back4.jpg' }, { id: 4, img: 'back4.jpg' },
-        { id: 5, img: 'back5.jpg' }, { id: 5, img: 'back5.jpg' },
-        { id: 6, img: 'back6.jpg' }, { id: 6, img: 'back6.jpg' }
-      ];
-      let firstCard, secondCard;
-      let lockBoard = false;
-      let matches = 0;
+  <script>
+    const cards = [
+      { id: 1, img: 'back1.jpg' }, { id: 1, img: 'back1.jpg' },
+      { id: 2, img: 'back2.jpg' }, { id: 2, img: 'back2.jpg' },
+      { id: 3, img: 'back3.jpg' }, { id: 3, img: 'back3.jpg' },
+      { id: 4, img: 'back4.jpg' }, { id: 4, img: 'back4.jpg' },
+      { id: 5, img: 'back5.jpg' }, { id: 5, img: 'back5.jpg' },
+      { id: 6, img: 'back6.jpg' }, { id: 6, img: 'back6.jpg' }
+    ];
+    let firstCard, secondCard;
+    let lockBoard = false;
+    let matches = 0;
 
-      function shuffle(array) {
-        array.sort(() => Math.random() - 0.5);
+    function shuffle(array) {
+      array.sort(() => Math.random() - 0.5);
+    }
+
+    function createBoard() {
+      shuffle(cards);
+      const gameBoard = document.getElementById("gameBoard");
+      cards.forEach(card => {
+        const cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.innerHTML = `
+          <div class="card-inner" data-id="${card.id}">
+            <div class="card-front"></div>
+            <div class="card-back" style="background-image: url('${card.img}')"></div>
+          </div>
+        `;
+        cardElement.addEventListener("click", flipCard);
+        gameBoard.appendChild(cardElement);
+      });
+    }
+
+    function flipCard() {
+      if (lockBoard) return;
+      const cardInner = this.querySelector(".card-inner");
+      cardInner.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = cardInner;
+        return;
       }
+      
+      secondCard = cardInner;
+      checkMatch();
+    }
 
-      function createBoard() {
-        shuffle(cards);
-        const gameBoard = document.getElementById("gameBoard");
-        cards.forEach(card => {
-          const cardElement = document.createElement("div");
-          cardElement.classList.add("card");
-          cardElement.innerHTML = `
-            <div class="card-inner" data-id="${card.id}">
-              <div class="card-front"><img src="https://acil42.com/wp-content/uploads/2024/10/on_yuz.png" alt="Örnek Resim"/></div>
-              <div class="card-back" style="background-image: url('${card.img}')"></div>
-            </div>
-          `;
-          cardElement.addEventListener("click", flipCard);
-          gameBoard.appendChild(cardElement);
-        });
-      }
-
-      function flipCard() {
-        if (lockBoard) return;
-        const cardInner = this.querySelector(".card-inner");
-        cardInner.classList.add("flipped");
-
-        if (!firstCard) {
-          firstCard = cardInner;
-          return;
+    function checkMatch() {
+      const isMatch = firstCard.dataset.id === secondCard.dataset.id;
+      if (isMatch) {
+        disableCards();
+        matches += 1;
+        if (matches === cards.length / 2) {
+          setTimeout(() => alert("Tebrikler! Tüm eşleşmeleri buldunuz."), 500);
         }
-        
-        secondCard = cardInner;
-        checkMatch();
+      } else {
+        unflipCards();
       }
+    }
 
-      function checkMatch() {
-        const isMatch = firstCard.dataset.id === secondCard.dataset.id;
-        if (isMatch) {
-          disableCards();
-          matches += 1;
-          if (matches === cards.length / 2) {
-            setTimeout(() => alert("Tebrikler! Tüm eşleşmeleri buldunuz."), 500);
-          }
-        } else {
-          unflipCards();
-        }
-      }
+    function disableCards() {
+      firstCard.removeEventListener("click", flipCard);
+      secondCard.removeEventListener("click", flipCard);
+      resetBoard();
+    }
 
-      function disableCards() {
-        firstCard.removeEventListener("click", flipCard);
-        secondCard.removeEventListener("click", flipCard);
+    function unflipCards() {
+      lockBoard = true;
+      setTimeout(() => {
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
         resetBoard();
-      }
+      }, 1000);
+    }
 
-      function unflipCards() {
-        lockBoard = true;
-        setTimeout(() => {
-          firstCard.classList.remove("flipped");
-          secondCard.classList.remove("flipped");
-          resetBoard();
-        }, 1000);
-      }
+    function resetBoard() {
+      [firstCard, secondCard, lockBoard] = [null, null, false];
+    }
 
-      function resetBoard() {
-        [firstCard, secondCard, lockBoard] = [null, null, false];
-      }
-
-      createBoard();
-    </script>
-  </body>
+    createBoard();
+  </script>
+</body>
 </html>
