@@ -29,11 +29,11 @@
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 10px;
       width: 100%;
-      flex-grow: 1; /* Boş alanın büyük kısmını oyun tahtasına ayır */
+      flex-grow: 1;
     }
     .card {
       width: 100%;
-      padding-top: 100%; /* Kartlar kare olacak şekilde ayarlandı */
+      padding-top: 100%;
       position: relative;
       cursor: pointer;
       perspective: 1000px;
@@ -49,15 +49,6 @@
     }
     .flipped {
       transform: rotateY(180deg);
-    }
-    .card.shake .card-inner {
-      animation: shake 0.5s;
-    }
-    @keyframes shake {
-      0%, 100% { transform: rotateY(180deg) translateX(0); }
-      25% { transform: rotateY(180deg) translateX(-5px); }
-      50% { transform: rotateY(180deg) translateX(5px); }
-      75% { transform: rotateY(180deg) translateX(-5px); }
     }
     .card-front, .card-back {
       position: absolute;
@@ -91,6 +82,20 @@
       flex: 1;
       height: 40px;
       font-size: 1rem;
+      background-color: green;
+      color: white;
+    }
+    .result-log {
+      margin-top: 20px;
+    }
+    .result-log ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .result-log ul li {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -103,7 +108,11 @@
     </div>
     <div class="game-board" id="gameBoard"></div>
     <div class="button-bar">
-      <button id="resetButton" class="btn btn-danger btn-custom" onclick="resetGame()">TEKRAR OYNA</button>
+      <button id="resetButton" class="btn btn-custom" onclick="resetGame()">BAŞTAN BAŞLA</button>
+    </div>
+    <div class="result-log">
+      <h5>Oyun Sonuçları:</h5>
+      <ul id="resultsList"></ul>
     </div>
   </div>
 
@@ -123,6 +132,7 @@
     let seconds = 0;
     let timerInterval;
     let gameStarted = false;
+    const resultsList = document.getElementById("resultsList");
 
     function shuffle(array) {
       array.sort(() => Math.random() - 0.5);
@@ -173,8 +183,11 @@
         lockMatchedCards();
         matches += 1;
         if (matches === cards.length / 2) {
-          setTimeout(() => alert("Tebrikler! Tüm eşleşmeleri buldunuz."), 500);
-          clearInterval(timerInterval);
+          setTimeout(() => {
+            alert("Tebrikler! Tüm eşleşmeleri buldunuz.");
+            logResult();
+            clearInterval(timerInterval);
+          }, 500);
         }
       } else {
         shakeAndUnflipCards();
@@ -228,6 +241,14 @@
       document.getElementById("moveCounter").innerText = `Hamle: 0`;
       document.getElementById("gameTimer").innerText = `Süre: 00:00`;
       createBoard();
+    }
+
+    function logResult() {
+      const resultItem = document.createElement("li");
+      const minutes = Math.floor(seconds / 60);
+      const displaySeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
+      resultItem.innerText = `Süre: ${minutes}:${displaySeconds}, Hamle: ${moveCount}`;
+      resultsList.appendChild(resultItem);
     }
 
     createBoard();
