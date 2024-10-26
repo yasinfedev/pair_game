@@ -161,188 +161,215 @@
     </div>
   </div>
 
+  <!-- Modal Yapısı -->
+  <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shareModalLabel">Paylaşmak İçin Görsel</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Kapat">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="resultImage" src="" alt="Sonuç Görseli" class="img-fluid"/>
+        </div>
+        <div class="modal-footer">
+          <a id="downloadLink" class="btn btn-primary" download="oyun_sonuclari.png">İndir</a>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const cards = [
-      { id: 1, img: 'https://acil42.com/wp-content/uploads/2024/10/resim1.png' }, { id: 1, img: 'https://acil42.com/wp-content/uploads/2024/10/resim1.png' },
-      { id: 2, img: 'https://acil42.com/wp-content/uploads/2024/10/resim2.png' }, { id: 2, img: 'https://acil42.com/wp-content/uploads/2024/10/resim2.png' },
-      { id: 3, img: 'https://acil42.com/wp-content/uploads/2024/10/resim3.png' }, { id: 3, img: 'https://acil42.com/wp-content/uploads/2024/10/resim3.png' },
-      { id: 4, img: 'https://acil42.com/wp-content/uploads/2024/10/resim4.png' }, { id: 4, img: 'https://acil42.com/wp-content/uploads/2024/10/resim4.png' },
-      { id: 5, img: 'https://acil42.com/wp-content/uploads/2024/10/resim5.png' }, { id: 5, img: 'https://acil42.com/wp-content/uploads/2024/10/resim5.png' },
-      { id: 6, img: 'https://acil42.com/wp-content/uploads/2024/10/resim6.png' }, { id: 6, img: 'https://acil42.com/wp-content/uploads/2024/10/resim6.png' }
-    ];
-    let firstCard, secondCard;
-    let lockBoard = false;
-    let matches = 0;
-    let moveCount = 0;
-    let milliseconds = 0;
-    let timerInterval;
-    let gameStarted = false;
-    const resultsList = document.getElementById("resultsList");
+  const cards = [
+    { id: 1, img: 'https://acil42.com/wp-content/uploads/2024/10/resim1.png' }, { id: 1, img: 'https://acil42.com/wp-content/uploads/2024/10/resim1.png' },
+    { id: 2, img: 'https://acil42.com/wp-content/uploads/2024/10/resim2.png' }, { id: 2, img: 'https://acil42.com/wp-content/uploads/2024/10/resim2.png' },
+    { id: 3, img: 'https://acil42.com/wp-content/uploads/2024/10/resim3.png' }, { id: 3, img: 'https://acil42.com/wp-content/uploads/2024/10/resim3.png' },
+    { id: 4, img: 'https://acil42.com/wp-content/uploads/2024/10/resim4.png' }, { id: 4, img: 'https://acil42.com/wp-content/uploads/2024/10/resim4.png' },
+    { id: 5, img: 'https://acil42.com/wp-content/uploads/2024/10/resim5.png' }, { id: 5, img: 'https://acil42.com/wp-content/uploads/2024/10/resim5.png' },
+    { id: 6, img: 'https://acil42.com/wp-content/uploads/2024/10/resim6.png' }, { id: 6, img: 'https://acil42.com/wp-content/uploads/2024/10/resim6.png' }
+  ];
+  let firstCard, secondCard;
+  let lockBoard = false;
+  let matches = 0;
+  let moveCount = 0;
+  let milliseconds = 0;
+  let timerInterval;
+  let gameStarted = false;
+  const resultsList = document.getElementById("resultsList");
 
-    function shuffle(array) {
-      array.sort(() => Math.random() - 0.5);
+  function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+  }
+
+  function createBoard() {
+    shuffle(cards);
+    const gameBoard = document.getElementById("gameBoard");
+    gameBoard.innerHTML = ''; // Temizle ve yeni kartları ekle
+    cards.forEach(card => {
+      const cardElement = document.createElement("div");
+      cardElement.classList.add("card");
+      cardElement.innerHTML = `
+        <div class="card-inner" data-id="${card.id}">
+          <div class="card-front"></div>
+          <div class="card-back" style="background-image: url('${card.img}')"></div>
+        </div>
+      `;
+      cardElement.addEventListener("click", flipCard);
+      gameBoard.appendChild(cardElement);
+    });
+  }
+
+  function flipCard() {
+    if (lockBoard) return;
+
+    if (!gameStarted) {
+      gameStarted = true;
+      startTimer();
     }
 
-    function createBoard() {
-      shuffle(cards);
-      const gameBoard = document.getElementById("gameBoard");
-      gameBoard.innerHTML = ''; // Temizle ve yeni kartları ekle
-      cards.forEach(card => {
-        const cardElement = document.createElement("div");
-        cardElement.classList.add("card");
-        cardElement.innerHTML = `
-          <div class="card-inner" data-id="${card.id}">
-            <div class="card-front"></div>
-            <div class="card-back" style="background-image: url('${card.img}')"></div>
-          </div>
-        `;
-        cardElement.addEventListener("click", flipCard);
-        gameBoard.appendChild(cardElement);
-      });
+    const cardInner = this.querySelector(".card-inner");
+    if (cardInner === firstCard || cardInner.classList.contains("matched")) return;
+    cardInner.classList.add("flipped");
+
+    if (!firstCard) {
+      firstCard = cardInner;
+      return;
     }
 
-    function flipCard() {
-      if (lockBoard) return;
+    secondCard = cardInner;
+    checkMatch();
+  }
 
-      if (!gameStarted) {
-        gameStarted = true;
-        startTimer();
+  function checkMatch() {
+    const isMatch = firstCard.dataset.id === secondCard.dataset.id;
+    if (isMatch) {
+      lockMatchedCards();
+      matches += 1;
+      if (matches === cards.length / 2) {
+        setTimeout(() => {
+          alert("Tebrikler! Tüm eşleşmeleri buldunuz.");
+          logResult();
+          clearInterval(timerInterval);
+        }, 500);
       }
+    } else {
+      shakeAndUnflipCards();
+    }
+    updateMoveCounter();
+  }
 
-      const cardInner = this.querySelector(".card-inner");
-      if (cardInner === firstCard || cardInner.classList.contains("matched")) return;
-      cardInner.classList.add("flipped");
+  function lockMatchedCards() {
+    firstCard.classList.add("matched");
+    secondCard.classList.add("matched");
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+  }
 
-      if (!firstCard) {
-        firstCard = cardInner;
-        return;
+  function shakeAndUnflipCards() {
+    lockBoard = true;
+    setTimeout(() => {
+      firstCard.classList.remove("flipped");
+      secondCard.classList.remove("flipped");
+      resetBoard();
+    }, 800);
+  }
+
+  function resetBoard() {
+    [firstCard, secondCard, lockBoard] = [null, null, false];
+  }
+
+  function updateMoveCounter() {
+    moveCount++;
+    document.getElementById("moveCounter").innerText = `Hamle: ${moveCount}`;
+  }
+
+  function startTimer() {
+    timerInterval = setInterval(updateTimer, 10); // 10 ms'de bir güncelleme
+  }
+
+  function updateTimer() {
+    milliseconds += 10;
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
+    const displaySeconds = seconds.toString().padStart(2, '0');
+    document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}.${displayMilliseconds}`;
+  }
+
+  function resetGame() {
+    clearInterval(timerInterval);
+    gameStarted = false;
+    moveCount = 0;
+    milliseconds = 0;
+    matches = 0;
+    document.getElementById("moveCounter").innerText = `Hamle: 0`;
+    document.getElementById("gameTimer").innerText = `Süre: 00:00.000`;
+    createBoard();
+  }
+
+  function clearScores() {
+    resultsList.innerHTML = ''; // Sonuçları temizle
+    resetGame(); // Oyunu sıfırla
+  }
+
+  function logResult() {
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
+    const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
+    const displaySeconds = seconds.toString().padStart(2, '0');
+
+    const resultItem = document.createElement("li");
+    resultItem.setAttribute("data-duration", milliseconds);
+    resultItem.setAttribute("data-moves", moveCount);
+    resultItem.innerHTML = `
+      Süre: <span class="duration">${minutes}:${displaySeconds}.${displayMilliseconds}</span>, 
+      Hamle: <span class="moves">${moveCount}</span>`;
+    resultsList.appendChild(resultItem);
+
+    highlightBestResults();
+  }
+
+  function highlightBestResults() {
+    const results = Array.from(resultsList.children);
+    if (results.length === 0) return;
+
+    let minDuration = Math.min(...results.map(item => parseInt(item.getAttribute("data-duration"))));
+    let minMoves = Math.min(...results.map(item => parseInt(item.getAttribute("data-moves"))));
+
+    results.forEach(item => {
+      item.querySelector(".duration").classList.remove("highlight");
+      item.querySelector(".moves").classList.remove("highlight");
+
+      if (parseInt(item.getAttribute("data-duration")) === minDuration) {
+        item.querySelector(".duration").classList.add("highlight");
       }
-
-      secondCard = cardInner;
-      checkMatch();
-    }
-
-    function checkMatch() {
-      const isMatch = firstCard.dataset.id === secondCard.dataset.id;
-      if (isMatch) {
-        lockMatchedCards();
-        matches += 1;
-        if (matches === cards.length / 2) {
-          setTimeout(() => {
-            alert("Tebrikler! Tüm eşleşmeleri buldunuz.");
-            logResult();
-            clearInterval(timerInterval);
-          }, 500);
-        }
-      } else {
-        shakeAndUnflipCards();
+      if (parseInt(item.getAttribute("data-moves")) === minMoves) {
+        item.querySelector(".moves").classList.add("highlight");
       }
-      updateMoveCounter();
-    }
+    });
+  }
 
-    function lockMatchedCards() {
-      firstCard.classList.add("matched");
-      secondCard.classList.add("matched");
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
-    }
+  function shareResults() {
+    const resultLog = document.getElementById("resultLog");
+    html2canvas(resultLog).then(canvas => {
+      const imageURL = canvas.toDataURL("image/png");
 
-    function shakeAndUnflipCards() {
-      lockBoard = true;
-      setTimeout(() => {
-        firstCard.classList.remove("flipped");
-        secondCard.classList.remove("flipped");
-        resetBoard();
-      }, 800);
-    }
+      // Görseli modal içindeki img etiketine ekle
+      document.getElementById("resultImage").src = imageURL;
+      
+      // İndir butonuna tıklayınca indirme linki olarak ayarla
+      document.getElementById("downloadLink").href = imageURL;
 
-    function resetBoard() {
-      [firstCard, secondCard, lockBoard] = [null, null, false];
-    }
+      // Modalı göster
+      $('#shareModal').modal('show');
+    });
+  }
 
-    function updateMoveCounter() {
-      moveCount++;
-      document.getElementById("moveCounter").innerText = `Hamle: ${moveCount}`;
-    }
-
-    function startTimer() {
-      timerInterval = setInterval(updateTimer, 10); // 10 ms'de bir güncelleme
-    }
-
-    function updateTimer() {
-      milliseconds += 10;
-      const minutes = Math.floor(milliseconds / 60000);
-      const seconds = Math.floor((milliseconds % 60000) / 1000);
-      const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
-      const displaySeconds = seconds.toString().padStart(2, '0');
-      document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}.${displayMilliseconds}`;
-    }
-
-    function resetGame() {
-      clearInterval(timerInterval);
-      gameStarted = false;
-      moveCount = 0;
-      milliseconds = 0;
-      matches = 0;
-      document.getElementById("moveCounter").innerText = `Hamle: 0`;
-      document.getElementById("gameTimer").innerText = `Süre: 00:00.000`;
-      createBoard();
-    }
-
-    function clearScores() {
-      resultsList.innerHTML = ''; // Sonuçları temizle
-      resetGame(); // Oyunu sıfırla
-    }
-
-    function logResult() {
-      const minutes = Math.floor(milliseconds / 60000);
-      const seconds = Math.floor((milliseconds % 60000) / 1000);
-      const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
-      const displaySeconds = seconds.toString().padStart(2, '0');
-
-      const resultItem = document.createElement("li");
-      resultItem.setAttribute("data-duration", milliseconds);
-      resultItem.setAttribute("data-moves", moveCount);
-      resultItem.innerHTML = `
-        Süre: <span class="duration">${minutes}:${displaySeconds}.${displayMilliseconds}</span>, 
-        Hamle: <span class="moves">${moveCount}</span>`;
-      resultsList.appendChild(resultItem);
-
-      highlightBestResults();
-    }
-
-    function highlightBestResults() {
-      const results = Array.from(resultsList.children);
-      if (results.length === 0) return;
-
-      let minDuration = Math.min(...results.map(item => parseInt(item.getAttribute("data-duration"))));
-      let minMoves = Math.min(...results.map(item => parseInt(item.getAttribute("data-moves"))));
-
-      results.forEach(item => {
-        item.querySelector(".duration").classList.remove("highlight");
-        item.querySelector(".moves").classList.remove("highlight");
-
-        if (parseInt(item.getAttribute("data-duration")) === minDuration) {
-          item.querySelector(".duration").classList.add("highlight");
-        }
-        if (parseInt(item.getAttribute("data-moves")) === minMoves) {
-          item.querySelector(".moves").classList.add("highlight");
-        }
-      });
-    }
-
-    function shareResults() {
-      const resultLog = document.getElementById("resultLog");
-      html2canvas(resultLog).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "oyun_sonuclari.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-
-    createBoard(); // Oyunu başlat
-  </script>
+  createBoard(); // Oyunu başlat
+</script>
 </body>
 </html>
