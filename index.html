@@ -13,30 +13,26 @@
     }
     html, body {
       height: 100%;
+      background-color: #f4f4f4;
       display: flex;
       justify-content: center;
-      align-items: center;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      padding: 20px;
+      align-items: flex-start;
     }
     .container {
       width: 100%;
       max-width: 500px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       background-color: white;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding-bottom: 20px;
     }
-    .card-header h4 {
-      font-size: 1.8rem;
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 100;
+      padding: 10px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .info-bar {
       display: flex;
@@ -52,15 +48,14 @@
       grid-gap: 5px;
       width: 100%;
       max-width: 500px;
+      margin: 20px 0;
     }
     .card {
-      width: 100%;
-      aspect-ratio: 1 / 1;
+      width: 100px;
+      height: 100px;
       position: relative;
       cursor: pointer;
       perspective: 1000px;
-      width: 100px;
-      height: 100px;
     }
     .card-inner {
       position: absolute;
@@ -94,20 +89,24 @@
     .button-bar {
       display: flex;
       justify-content: space-between;
+      gap: 10px;
       width: 100%;
+      max-width: 500px;
       margin-top: 15px;
     }
     .btn-custom {
-      width: 48%;
+      flex: 1;
       height: 60px;
       font-size: 1.2rem;
+      background-color: green;
       color: white;
     }
-    .btn-green {
-      background-color: green;
-    }
-    .btn-red {
+    .btn-reset {
+      flex: 1;
+      height: 60px;
+      font-size: 1.2rem;
       background-color: red;
+      color: white;
     }
     .result-log ul {
       list-style-type: none;
@@ -119,30 +118,29 @@
       font-size: 1rem;
       font-weight: bold;
     }
-    .result-log {
-      margin-top: 15px;
-      width: 100%;
-    }
     .highlight {
       color: green;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div class="card-body">
-      <div class="alert alert-primary text-center" role="alert">
-        KŞH Acil Eşleştirme Oyunu
+    <div class="sticky-header text-center">
+      <div class="alert alert-primary mb-1" role="alert">
+        <h4 class="mb-0">KŞH Acil Eşleştirme Oyunu</h4>
       </div>
       <div class="info-bar">
         <div id="gameTimer"><b>Süre:</b> 00:00.000</div>
         <div id="moveCounter"><b>Hamle:</b> 0</div>
       </div>
+    </div>
+    <div class="card-body">
       <div class="game-board" id="gameBoard"></div>
-      <div class="button-bar">
-        <button id="resetButton" class="btn btn-custom btn-green" onclick="resetGame()">YENİ EL</button>
-        <button id="clearScoresButton" class="btn btn-custom btn-red" onclick="clearScores()">SIFIRLA</button>
+      <div class="button-bar mt-3 text-center">
+        <button id="resetButton" class="btn btn-custom" onclick="resetGame()">YENİ EL</button>
+        <button id="clearScoresButton" class="btn btn-reset" onclick="clearScores()">SIFIRLA</button>
       </div>
       <div class="result-log mt-3">
         <div class="alert alert-info text-center" role="alert">
