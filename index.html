@@ -355,7 +355,7 @@
 
   function shareResults() {
     const resultLog = document.getElementById("resultLog");
-    html2canvas(resultLog).then(canvas => {
+    html2canvas(resultLog, { scale: 2 }).then(canvas => {
       const imageURL = canvas.toDataURL("image/png");
 
       // Görseli modal içindeki img etiketine ekle
@@ -366,6 +366,9 @@
 
       // Modalı göster
       $('#shareModal').modal('show');
+    }).catch(error => {
+      console.error("Görsel alınamadı:", error);
+      alert("Görsel alınırken bir hata oluştu.");
     });
   }
 
