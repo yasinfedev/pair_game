@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <title>Eşleştirme Oyunu</title>
   <style>
     * {
@@ -122,6 +123,14 @@
       color: green;
       font-weight: bold;
     }
+    .btn-share {
+      width: 100%;
+      margin-top: 15px;
+      height: 50px;
+      font-size: 1.2rem;
+      background-color: blue;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -142,12 +151,13 @@
         <button id="resetButton" class="btn btn-custom" onclick="resetGame()">YENİ EL</button>
         <button id="clearScoresButton" class="btn btn-reset" onclick="clearScores()">SIFIRLA</button>
       </div>
-      <div class="result-log mt-3">
+      <div class="result-log mt-3" id="resultLog">
         <div class="alert alert-info text-center" role="alert">
           Oyun Sonuçları:
         </div>
         <ul id="resultsList"></ul>
       </div>
+      <button id="shareButton" class="btn btn-share" onclick="shareResults()">PAYLAŞ</button>
     </div>
   </div>
 
@@ -319,6 +329,16 @@
         if (parseInt(item.getAttribute("data-moves")) === minMoves) {
           item.querySelector(".moves").classList.add("highlight");
         }
+      });
+    }
+
+    function shareResults() {
+      const resultLog = document.getElementById("resultLog");
+      html2canvas(resultLog).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "oyun_sonuclari.png";
+        link.href = canvas.toDataURL();
+        link.click();
       });
     }
 
