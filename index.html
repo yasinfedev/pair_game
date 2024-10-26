@@ -132,7 +132,7 @@
         <h4 class="mb-0">KŞH Acil Eşleştirme Oyunu</h4>
       </div>
       <div class="info-bar">
-        <div id="gameTimer"><b>Süre:</b> 00:00</div>
+        <div id="gameTimer"><b>Süre:</b> 00:00.000</div>
         <div id="moveCounter"><b>Hamle:</b> 0</div>
       </div>
     </div>
@@ -164,7 +164,7 @@
     let lockBoard = false;
     let matches = 0;
     let moveCount = 0;
-    let seconds = 0;
+    let milliseconds = 0;
     let timerInterval;
     let gameStarted = false;
     const resultsList = document.getElementById("resultsList");
@@ -257,24 +257,26 @@
     }
 
     function startTimer() {
-      timerInterval = setInterval(updateTimer, 1000);
+      timerInterval = setInterval(updateTimer, 10); // 10 ms'de bir güncelleme
     }
 
     function updateTimer() {
-      seconds++;
-      const minutes = Math.floor(seconds / 60);
-      const displaySeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
-      document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}`;
+      milliseconds += 10;
+      const minutes = Math.floor(milliseconds / 60000);
+      const seconds = Math.floor((milliseconds % 60000) / 1000);
+      const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
+      const displaySeconds = seconds.toString().padStart(2, '0');
+      document.getElementById("gameTimer").innerText = `Süre: ${minutes}:${displaySeconds}.${displayMilliseconds}`;
     }
 
     function resetGame() {
       clearInterval(timerInterval);
       gameStarted = false;
       moveCount = 0;
-      seconds = 0;
+      milliseconds = 0;
       matches = 0;
       document.getElementById("moveCounter").innerText = `Hamle: 0`;
-      document.getElementById("gameTimer").innerText = `Süre: 00:00`;
+      document.getElementById("gameTimer").innerText = `Süre: 00:00.000`;
       createBoard();
     }
 
@@ -284,14 +286,16 @@
     }
 
     function logResult() {
-      const minutes = Math.floor(seconds / 60);
-      const displaySeconds = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
+      const minutes = Math.floor(milliseconds / 60000);
+      const seconds = Math.floor((milliseconds % 60000) / 1000);
+      const displayMilliseconds = (milliseconds % 1000).toString().padStart(3, '0');
+      const displaySeconds = seconds.toString().padStart(2, '0');
 
       const resultItem = document.createElement("li");
-      resultItem.setAttribute("data-duration", seconds);
+      resultItem.setAttribute("data-duration", milliseconds);
       resultItem.setAttribute("data-moves", moveCount);
       resultItem.innerHTML = `
-        Süre: <span class="duration">${minutes}:${displaySeconds}</span>, 
+        Süre: <span class="duration">${minutes}:${displaySeconds}.${displayMilliseconds}</span>, 
         Hamle: <span class="moves">${moveCount}</span>`;
       resultsList.appendChild(resultItem);
 
