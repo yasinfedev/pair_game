@@ -354,23 +354,31 @@
   }
 
   function shareResults() {
-    const resultLog = document.getElementById("resultLog");
-    html2canvas(resultLog, { scale: 2 }).then(canvas => {
-      const imageURL = canvas.toDataURL("image/png");
+  const resultLog = document.getElementById("resultLog");
 
-      // Görseli modal içindeki img etiketine ekle
-      document.getElementById("resultImage").src = imageURL;
-      
-      // İndir butonuna tıklayınca indirme linki olarak ayarla
-      document.getElementById("downloadLink").href = imageURL;
+  html2canvas(resultLog, {
+    scale: 2,                 // Çözünürlüğü artırır
+    useCORS: true,            // Farklı alanlardan resimleri alır
+    logging: true,            // Hata tespiti için logging etkinleştirir
+    backgroundColor: null     // Arka planı saydam yapar
+  })
+  .then(canvas => {
+    const imageURL = canvas.toDataURL("image/png");
 
-      // Modalı göster
-      $('#shareModal').modal('show');
-    }).catch(error => {
-      console.error("Görsel alınamadı:", error);
-      alert("Görsel alınırken bir hata oluştu.");
-    });
-  }
+    // Görseli modal içindeki img etiketine ekle
+    document.getElementById("resultImage").src = imageURL;
+
+    // İndir butonuna tıklayınca indirme linki olarak ayarla
+    document.getElementById("downloadLink").href = imageURL;
+
+    // Modalı göster
+    $('#shareModal').modal('show');
+  })
+  .catch(error => {
+    console.error("Görsel alınırken bir hata oluştu:", error);
+    alert("Görsel alınırken bir hata oluştu.");
+  });
+}
 
   createBoard(); // Oyunu başlat
 </script>
